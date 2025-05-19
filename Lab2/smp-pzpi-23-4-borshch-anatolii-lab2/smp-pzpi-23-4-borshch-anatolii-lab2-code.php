@@ -104,7 +104,7 @@ function setup_profile() {
         echo "Ваше імʼя: ";
         $input = trim(fgets(STDIN));
 
-        if (!preg_match("/^[А-Яа-яЁёЇїІіЄєҐґA-Za-z\s\-\x27]+$/u", $input)) {
+        if (!preg_match("/^[\p{L}\s'’ʼ\-]+$/u", $input)) {
             echo "ПОМИЛКА! Імʼя може містити лише літери, апостроф ‘ʼ’, дефіс ‘-’, пробіл\n\n";
             continue;
         }
