@@ -1,0 +1,361 @@
+﻿Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+Кафедра програмної інженерії
+
+ЗВІТ
+з лабораторної роботи № 3
+з дисципліни «Скриптові мови програмування»
+
+Виконав
+ст. гр. ПЗПІ-23-4
+Борщ Анатолій Сергійович
+Перевірив
+ст. вик. Сокорчук Ігор Петрович
+
+Харків 2025
+
+1 ІСТОРІЯ ЗМІН
+№	Дата		Версія звіту	Опис виправлень та змін1	18.05.2025	1.0		Створено розділ «Історія змін»2	18.05.2025	1.0		Створено розділ «Завдання»3	18.05.2025	1.0		Створено розділ «Висновки»4	18.05.2025	1.0		Створено розділ «Додаток Б»5	18.05.2025	1.0		Створено розділ «Додаток В»
+2 ЗАВДАННЯ
+     3.1 Мета роботи
+Отримати базові знання з розробки сайтів.
+	3.2 Завдання
+	Скористайтеся HTML для побудови веб сторінки, розділивши її на основні складові: шапку сайту, тіло сайту та підвал. 
+У тілі сайту має бути розміщена форма, яка дозволяє користувачеві обрати товари для замовлення. 
+Форма повинна містити перелік товарів, де навпроти кожного з них буде вказано ціну та поле для введення кількості. 
+В кінці списку товарів необхідно розмістити кнопку для надсилання форми. Після натискання на цю кнопку дані мають передаватися методом POST.
+На стороні сервера потрібно отримати передані дані, перевірити, чи передано значення для кожного товару, а також переконатися, що введена кількість є числом і більша за нуль. 
+Усі ці дані мають відповідати вимогам, необхідним для формування сторінки кошика. Після успішної перевірки дані слід зберегти в сесію та перенаправити користувача на сторінку кошика.
+Сторінка товарів
+Форма має відповідати таким вимогам:
+1. Має містити перелік товарів.
+2. Навпроти кожного товару мають розташовуватися:
+А. Ціна;
+Б. Поле для введення кількості товару.
+У кінці списку має бути кнопка для надсилання даних із форми.
+Сторінка «Кошик»
+Необхідно показати у вигляді таблиці список вибраних товарів.
+Таблиця складається з:
+1) id - унікальний номер товару;
+2) name - ім'я товару;
+3) price - ціна за одиницю товару;
+4) count - кількість товару;
+
+
+3 ОПИС ВИКОНАНОЇ РОБОТИ
+     Сайт поділений на логічні блоки: шапка (header), основне тіло (main) та підвал (footer). 
+Всі ці частини повторно використовуються через окремі включення (include 'header.php', include 'footer.php').
+     Сторінка товарів:
+     У тілі сторінки реалізовано форму для вибору товарів. Форма має вигляд таблиці, де:
+     Кожний товар представлений у вигляді окремого рядка з полями:
+• Id
+• Назва товару
+• Ціна
+• Поле для введення кількості (input[type="number"])
+Внизу розміщена кнопка "Send", яка відправляє форму методом POST.
+     При надсиланні даних сервер обробляє введені значення. Для кожного товару перевіряється, чи кількість більша за нуль. 
+Якщо умова виконується, товар додається до сесійного масиву $_SESSION['cart'], після чого відбувається перенаправлення на сторінку кошика.
+     Сторінка кошика:
+Ця сторінка відображає обрані товари у вигляді таблиці зі стовпцями:
+• Id
+• Name
+• Price
+• Count
+• Sum
+   Також присутні кнопки:
+Pay — оформлення покупки, після чого виводиться повідомлення з подякою і кошик очищається.
+Cancel all — очищення кошика без покупки.
+Інтерфейс оформлено за допомогою Bootstrap 5.
+Сесії використовуються для зберігання даних кошика між запитами. 
+Усі дії з додавання, видалення товарів та оформлення замовлення відбуваються шляхом оновлення сесійної змінної $_SESSION['cart'].
+Товари зчитуються з бази даних SQLite через PDO. Встановлено режим виведення помилок через PDO::ERRMODE_EXCEPTION.
+4 ВИСНОВКИ
+     Реалізовано повноцінний міні-магазин, який дозволяє користувачам обирати товари, переглядати кошик, редагувати його вміст та оформляти покупку, при цьому відпрацьовано роботу 
+з базою даних SQLite через PDO, обробку HTML-форм методом POST, перевірку вхідних даних, 
+використання сесій для збереження стану користувача, структурування сторінок із загальними компонентами (шапка, підвал), створення адаптивного інтерфейсу за допомогою Bootstrap 5.
+
+ДОДАТОК Б 
+Графічні матеріали
+
+Рисунок Б.1 – Головна сторінка сайту.
+
+
+Рисунок Б.2 – Сторінка продуктів сайту.
+
+
+Рисунок Б.3 – Сторінка пустого продуктового кошику.
+
+
+Рисунок Б.4 – Сторінка заповненого продуктового кошику.
+
+
+Рисунок Б.5 – Сторінка після покупки.
+
+ДОДАТОК В
+Програмний код
+B.1 cart.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/cart.php
+1  <?php
+2  include 'session.php';
+3  
+4  $showThankYou = false;
+5  
+6  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+7      if (isset($_POST['remove'])) {
+8          $id = (int)$_POST['remove'];
+9          unset($cart[$id]);
+10         $_SESSION['cart'] = $cart;
+11         header("Location: cart.php");
+12         exit;
+13     }
+14 
+15     if (isset($_POST['purchase'])) {
+16         $cart = [];
+17         $_SESSION['cart'] = [];
+18         $showThankYou = true;
+19     }
+20 
+21     if (isset($_POST['cancel'])) {
+22         $cart = [];
+23         $_SESSION['cart'] = [];
+24     }
+25 }
+26 ?>
+27 <!DOCTYPE html>
+28 <html lang="uk">
+29 <head>
+30     <meta charset="UTF-8">
+31     <title>Продовольчий магазин "Весна"</title>
+32     <style>
+33         html, body {
+34             height: 100%;
+35             margin: 0;
+36         }
+37         body {
+38             display: flex;
+39             flex-direction: column;
+40         }
+41         main {
+42             flex: 1;
+43         }
+44     </style>  
+45 </head>
+46 <body>
+47 <?php include 'header.php'; ?>
+48 <main>
+49     <div class="container text-center">
+50         <h2 class="mb-4">Your cart</h2>
+51 
+52         <?php if ($showThankYou): ?>
+53             <div class="alert alert-success">
+54                 <h3>Дякуємо за покупку!</h3>
+55                 <a href="products.php" class="btn btn-primary mt-3">Продовжити покупки</a>
+56             </div>
+57         <?php elseif (empty($cart)): ?>
+58             <h3>Empty</h3>
+59             <a href="products.php" class="btn btn-primary btn-lg">Перейти до покупок</a>
+60         <?php else: ?>
+61             <form method="post">
+62                 <table class="table table-bordered w-75 mx-auto">
+63                     <thead class="table-light">
+64                         <tr><th>id</th><th>Name</th><th>Price</th><th>Count</th><th>Sum</th><th></th></tr>
+65                     </thead>
+66                     <tbody>
+67                     <?php $total = 0; foreach ($cart as $id => $qty):
+68                         $product = $products[$id];
+69                         $sum = $qty * $product['price'];
+70                         $total += $sum;
+71                     ?>
+72                     <tr>
+73                         <td><?= $id ?></td>
+74                         <td><?= $product['name'] ?></td>
+75                         <td><?= $product['price'] ?> грн</td>
+76                         <td><?= $qty ?></td>
+77                         <td><?= $sum ?> грн</td>
+78                         <td><button name="remove" value="<?= $id ?>" class="btn btn-sm btn-danger">X</button></td>
+79                     </tr>
+80                     <?php endforeach; ?>
+81                     <tr>
+82                         <td>Total</td>
+83                         <td></td>
+84                         <td></td>
+85                         <td></td>
+86                         <td><?= $total ?> грн</td>
+87                         <td></td>
+88                     </tr>   
+89                     </tbody>
+90                 </table>
+91                 <button name="purchase" class="btn btn-success mt-4 me-2">Pay</button>
+92                 <button name="cancel" class="btn btn-warning mt-4">Cancel all</button>
+93             </form>
+94         <?php endif; ?>
+95     </div>
+96 </main>
+97 <?php include 'footer.php'; ?>
+98 </body>
+99 </html>
+
+B.2 context.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/context.php 1<?php
+2function getDbConnection(): PDO {
+3    $db = new PDO('sqlite:' . __DIR__ . '/store.db');
+4    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+5    return $db;
+6}
+7?>
+
+B.3 footer.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/footer.php
+1<footer class="bg-light py-3 mt-5">
+2    <div class="text-center">
+3        <a href="home.php" class="text-decoration-none mx-4">Home</a> |
+4        <a href="products.php" class="text-decoration-none mx-4">Products</a> |
+5        <a href="cart.php" class="text-decoration-none mx-4">Cart</a> |
+6        <a href="https://www.php.net/" class="text-decoration-none mx-4">About us</a>
+7    </div>
+8</footer>
+
+B.4 header.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/header.php
+1 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+2 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+3 
+4 <header class="bg-light py-3 mb-4 shadow">
+5     <div class="container-fluid">
+6         <div class="row text-center">
+7             <div class="col text-start">
+8                 <a href="home.php" class="text-decoration-none fs-5"><i class="bi bi-house-door"></i> Home</a>
+9             </div>
+10            <div class="col text-start">
+11                    <span class="ms-1">|</span>
+12            </div>
+13            <div class="col text-center">
+14                <a href="products.php" class="text-decoration-none fs-5"><i class="bi bi-list"></i> Products</a>
+15            </div>
+16            <div class="col text-end">
+17                    <span class="ms-1">|</span>
+18            </div>
+19            <div class="col text-end">
+20                <a href="cart.php" class="text-decoration-none fs-5"><i class="bi bi-cart"></i> Cart</a>
+21            </div>
+22        </div>
+23    </div>
+24</header>
+
+B.5 home.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/home.php
+1 <?php include 'session.php'; ?>
+2 <!DOCTYPE html>
+3 <html lang="uk">
+4 <head>
+5     <meta charset="UTF-8">
+6     <title>Продовольчий магазин "Весна"</title>
+7     
+8     <style>
+9         html, body {
+10            height: 100%;
+11            margin: 0;
+12        }
+13        body {
+14            display: flex;
+15            flex-direction: column;
+16        }
+17        main {
+18            flex: 1;
+19        }
+20    </style>    
+21</head>
+22<body>
+23<?php include 'header.php'; ?>
+24<main>
+25    <div class="container text-center mt-5">
+26        <h2>ПРОДОВОЛЬЧИЙ МАГАЗИН "ВЕСНА"</h2>
+27        <a href="products.php" class="btn btn-primary btn-lg">Перейти до покупок</a>
+28    </div>
+29</main>
+30<?php include 'footer.php'; ?>
+31</body>
+32</html>
+
+B.6 products.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/products.php
+1 <?php
+2 include 'session.php';
+3 
+4 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
+5     foreach ($_POST['qty'] as $id => $qty) {
+6         $qty = (int)$qty;
+7         if (isset($products[$id]) && $qty > 0) {
+8             $cart[$id] = ($cart[$id] ?? 0) + $qty;
+9         }
+10    }
+11
+12    $_SESSION['cart'] = $cart;
+13
+14    header("Location: cart.php");
+15    exit;
+16}
+17?>
+18<!DOCTYPE html>
+19<html lang="uk">
+20<head>
+21    <meta charset="UTF-8">
+22    <title>Продовольчий магазин "Весна"</title>
+23    <style>
+24        html, body {
+25            height: 100%;
+26            margin: 0;
+27        }
+28        body {
+29            display: flex;
+30            flex-direction: column;
+31        }
+32        main {
+33            flex: 1;
+34        }
+35    </style>    
+36</head>
+37<body>
+38<?php include 'header.php'; ?>
+39<main>
+40    <div class="container text-center">
+41        <form method="post">
+42            <table class="table table-bordered w-75 mx-auto">
+43                <thead class="table-light">
+44                </thead>
+45                <tbody>
+46                    <?php foreach ($products as $id => $p): ?>
+47                    <tr>
+48                        <td><?= $id ?></td>
+49                        <td><?= $p['name'] ?></td>
+50                        <td><?= $p['price'] ?> грн</td>
+51                        <td><input type="number" name="qty[<?= $id ?>]" value="0" min="0" max="99" class="form-control" style="width:80px;margin:auto;"></td>
+52                    </tr>
+53                    <?php endforeach; ?>
+54                </tbody>
+55            </table>
+56            <button type="submit" name="add_to_cart" class="btn btn-success mt-3">Send</button>
+57        </form>
+58    </div>
+59</main>
+60<?php include 'footer.php'; ?>
+61</body>
+62</html>
+
+B.7 session.php
+GitHub репозиторій: https://github.com/NureBorshchAnatolii/smp-pzpi-23-4-borshch-anatolii/blob/main/Lab3/smp-pzpi-23-4-borshch-anatolii-lab3/session.php
+1 <?php
+2 session_start();
+3 
+4 require_once 'context.php';
+5 $pdo = getDbConnection();
+6 
+7 $products = [];
+8 $stmt = $pdo->query("SELECT id, name, price FROM products");
+9 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+10    $products[$row['id']] = ['name' => $row['name'], 'price' => $row['price']];
+11}
+12
+13$cart = $_SESSION['cart'] ?? [];
+14
+15?>
